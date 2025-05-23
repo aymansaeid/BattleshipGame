@@ -131,7 +131,7 @@ public class BattleshipClient {
   
 
     
-    private void closeConnection() {
+    void closeConnection() {
         try {
             if (socket != null && !socket.isClosed()) {
                 socket.close();
