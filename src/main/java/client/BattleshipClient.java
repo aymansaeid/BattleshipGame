@@ -58,7 +58,7 @@ public class BattleshipClient {
     private void processServerMessage(String message) {
         if (message.startsWith("PLAYER_ID:")) {
             playerId = Integer.parseInt(message.substring(10));
-            SwingUtilities.invokeLater(() -> gui.setPlayerId(playerId));
+            SwingUtilities.invokeLater(() -> gui.setPlayerId(playerId ));
         } 
         else if (message.startsWith("TURN:")) {
             int turnPlayer = Integer.parseInt(message.substring(5));
