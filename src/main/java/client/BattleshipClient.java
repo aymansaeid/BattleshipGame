@@ -21,7 +21,7 @@ public class BattleshipClient {
     private BattleshipGUI gui;
     
     public BattleshipClient() {
-        myBoard = new Board(10, playerId);
+        myBoard = new Board(10, "Player " + playerId);
         this.gui = new BattleshipGUI(this);
          SwingUtilities.invokeLater(() -> gui.setPlayerId(playerId));
         connectToServer();
@@ -58,7 +58,7 @@ public class BattleshipClient {
     private void processServerMessage(String message) {
         if (message.startsWith("PLAYER_ID:")) {
             playerId = Integer.parseInt(message.substring(10));
-            SwingUtilities.invokeLater(() -> gui.setPlayerId(playerId ));
+            SwingUtilities.invokeLater(() -> gui.setPlayerId(playerId));
         } 
         else if (message.startsWith("TURN:")) {
             int turnPlayer = Integer.parseInt(message.substring(5));
