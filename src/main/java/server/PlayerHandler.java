@@ -1,7 +1,7 @@
 package server;
 
 import common.Board;
-import common.Ship; // Assuming Ship class might be needed by Board, though not directly here
+import common.Ship; 
 import java.io.*;
 import java.net.Socket;
 import java.util.List;
@@ -20,7 +20,7 @@ public class PlayerHandler implements Runnable {
     public PlayerHandler(BattleshipServer server, Socket socket, int boardSize, int playerId) throws IOException {
         this.server = server;
         this.socket = socket;
-        this.board = new Board(boardSize, "Player " + playerId); // boardSize is used here
+        this.board = new Board(boardSize,  playerId); // boardSize is used here
         this.out = new PrintWriter(socket.getOutputStream(), true);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.playerId = playerId;
@@ -99,7 +99,7 @@ public class PlayerHandler implements Runnable {
         try {
             // Clear existing ships first
             // Re-initialize board for this player if placements are being re-sent
-            this.board = new Board(this.board.getSize(), "Player " + playerId); 
+            this.board = new Board(this.board.getSize(),  playerId); 
             
             String[] shipData = message.substring(6).split("\\|"); // SHIPS:data
             int shipsSuccessfullyPlaced = 0;

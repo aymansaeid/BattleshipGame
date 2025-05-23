@@ -9,9 +9,9 @@ public class Board {
     private final List<Ship> ships;
     private int shipsSunk;
     private int totalHits; // Track total hits for debugging
-    private final String playerId;
+    private int playerId;
 
-    public Board(int size, String playerId) {
+    public Board(int size, int playerId) {
         this.size = size;
         this.grid = new Cell[size][size];
         this.ships = new ArrayList<>();
@@ -28,11 +28,11 @@ public class Board {
     }
 
    public boolean placeShip(Ship ship, int x, int y, boolean isVertical) {
-    System.out.println("Player " + playerId + " attempting to place ship at " + x + "," + y + 
+    System.out.println("Player " + " attempting to place ship at " + x + "," + y + 
         " size " + ship.getSize() + " vertical: " + isVertical);
     
     if (!canPlaceShip(ship, x, y, isVertical)) {
-        System.out.println("Player " + playerId + " failed - invalid position");
+        System.out.println("Player "+ " failed - invalid position");
         return false;
     }
     
@@ -40,50 +40,50 @@ public class Board {
         for (int i = 0; i < ship.getSize(); i++) {
             grid[x + i][y].setShip(ship);
             ship.addCoordinate(x + i, y);
-            System.out.println("Player " + playerId + " placed ship part at " + (x + i) + "," + y);
+            System.out.println("Player " + " placed ship part at " + (x + i) + "," + y);
         }
     } else {
         for (int i = 0; i < ship.getSize(); i++) {
             grid[x][y + i].setShip(ship);
             ship.addCoordinate(x, y + i);
-            System.out.println("Player " + playerId + " placed ship part at " + x + "," + (y + i));
+            System.out.println("Player " + " placed ship part at " + x + "," + (y + i));
         }
     }
     
     ships.add(ship);
-    System.out.println("Player " + playerId + " successfully placed entire ship");
+    System.out.println("Player " + " successfully placed entire ship");
     return true;
 }
 
     private boolean canPlaceShip(Ship ship, int x, int y, boolean isVertical) {
-    System.out.println("Player " + playerId + " checking placement at " + x + "," + y + 
+    System.out.println("Player" + " checking placement at " + x + "," + y + 
         " size " + ship.getSize() + " vertical: " + isVertical);
     
     if (isVertical) {
         if (x + ship.getSize() > size) {
-            System.out.println("Player " + playerId + " placement failed - out of bounds vertically");
+            System.out.println("Player " + " placement failed - out of bounds vertically");
             return false;
         }
         for (int i = 0; i < ship.getSize(); i++) {
             if (grid[x + i][y].hasShip()) {
-                System.out.println("Player " + playerId + " placement failed - collision at " + (x + i) + "," + y);
+                System.out.println("Player " + " placement failed - collision at " + (x + i) + "," + y);
                 return false;
             }
         }
     } else {
         if (y + ship.getSize() > size) {
-            System.out.println("Player " + playerId + " placement failed - out of bounds horizontally");
+            System.out.println("Player " + " placement failed - out of bounds horizontally");
             return false;
         }
         for (int i = 0; i < ship.getSize(); i++) {
             if (grid[x][y + i].hasShip()) {
-                System.out.println("Player " + playerId + " placement failed - collision at " + x + "," + (y + i));
+                System.out.println("Player " + " placement failed - collision at " + x + "," + (y + i));
                 return false;
             }
         }
     }
 
-    System.out.println("Player " + playerId + " placement valid");
+    System.out.println("Player placement valid");
     return true;
 }
     public ShotResult receiveShot(int x, int y) {

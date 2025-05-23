@@ -21,7 +21,7 @@ public class BattleshipClient {
     private BattleshipGUI gui;
     
     public BattleshipClient() {
-        myBoard = new Board(10, "Player " + playerId);
+        myBoard = new Board(10, playerId);
         this.gui = new BattleshipGUI(this);
          SwingUtilities.invokeLater(() -> gui.setPlayerId(playerId));
         connectToServer();
