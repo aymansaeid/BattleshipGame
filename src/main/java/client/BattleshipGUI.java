@@ -17,7 +17,7 @@ public class BattleshipGUI extends JFrame {
     
     private JPanel myBoardPanel;
     private JPanel opponentBoardPanel;
-    private JLabel statusLabel;
+    JLabel statusLabel;
     private JPanel controlPanel;
     private JButton readyButton;
     
@@ -207,12 +207,11 @@ public class BattleshipGUI extends JFrame {
   public void setTurn(boolean myTurn) {
     this.myTurn = myTurn;
       if (placingShips) {
-        // Keep original ship placement status during setup
         statusLabel.setText("Place your ships!");
     } else {
-        // Exactly what you requested for turn status
-        statusLabel.setText(myTurn ? "Your turn! Attack opponent's board" 
-                                 : "OPPONENT'S TURN - Waiting for their move...");
+        statusLabel.setText(myTurn ? 
+            (statusLabel.getText().contains("HIT") ? "HIT! Shoot again!" : "Your turn! Attack opponent's board") 
+            : "OPPONENT'S TURN - Waiting for their move...");
     }
     
     // Enable/disable opponent board buttons

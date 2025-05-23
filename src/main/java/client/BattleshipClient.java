@@ -57,47 +57,50 @@ public class BattleshipClient {
     }
 
     private void processServerMessage(String message) {
-        if (message.startsWith("PLAYER_ID:")) {
-            playerId = Integer.parseInt(message.substring(10));
-            SwingUtilities.invokeLater(() -> gui.setPlayerId(playerId));
-        } else if (message.startsWith("TURN:")) {
-            int turnPlayer = Integer.parseInt(message.substring(5));
-            myTurn = (turnPlayer == playerId);
-            SwingUtilities.invokeLater(() -> gui.setTurn(myTurn));
-        } else if (message.startsWith("SHOT_RESULT:")) {
-            String[] parts = message.substring(12).split(",");
-            int x = Integer.parseInt(parts[0]);
-            int y = Integer.parseInt(parts[1]);
-            ShotResult result = ShotResult.valueOf(parts[2]);
-            SwingUtilities.invokeLater(() -> {
-                gui.updateOpponentBoard(x, y, result);
-                // Re-enable shooting if it was a hit KKKKKKKK 
-                if (result.isHit()) {
-                    gui.setTurn(true);
-                }
-            });
-
-        } else if (message.startsWith("OPPONENT_SHOT:")) {
-            String[] parts = message.substring(14).split(",");
-            int x = Integer.parseInt(parts[0]);
-            int y = Integer.parseInt(parts[1]);
-            ShotResult result = ShotResult.valueOf(parts[2]);
-            SwingUtilities.invokeLater(() -> {
-                gui.updateMyBoard(x, y, result);
-                if (result == ShotResult.GAME_OVER) {
-                    gui.gameOver(false);
-                }
-            });
-        } else if (message.equals("GAME_START")) {
-            SwingUtilities.invokeLater(() -> gui.gameStarted());
-        } else if (message.startsWith("GAME_OVER:")) {
-            int winner = Integer.parseInt(message.substring(10));
-            SwingUtilities.invokeLater(() -> {
-                gui.gameOver(winner == playerId);
-                closeConnection();
-            });
-        }
+      
+    if (message.startsWith("PLAYER_ID:")) {
+        playerId = Integer.parseInt(message.substring(10));
+        SwingUtilities.invokeLater(() -> gui.setPlayerId(playerId));
+    } else if (message.startsWith("TURN:")) {
+        int turnPlayer = Integer.parseInt(message.substring(5));
+        myTurn = (turnPlayer == playerId);
+        SwingUtilities.invokeLater(() -> gui.setTurn(myTurn));
+    } else if (message.startsWith("SHOT_RESULT:")) {
+        String[] parts = message.substring(12).split(",");
+        int x = Integer.parseInt(parts[0]);
+        int y = Integer.parseInt(parts[1]);
+        ShotResult result = ShotResult.valueOf(parts[2]);
+        SwingUtilities.invokeLater(() -> {
+            gui.updateOpponentBoard(x, y, result);
+        });
+    } else if (message.equals("HIT_CONTINUE")) {
+        // This is the critical fix - give the player another turn after a hit
+        myTurn = true;
+        SwingUtilities.invokeLater(() -> {
+            gui.setTurn(true);
+            gui.statusLabel.setText("HIT! Shoot again!");
+        });
+    } else if (message.startsWith("OPPONENT_SHOT:")) {
+        String[] parts = message.substring(14).split(",");
+        int x = Integer.parseInt(parts[0]);
+        int y = Integer.parseInt(parts[1]);
+        ShotResult result = ShotResult.valueOf(parts[2]);
+        SwingUtilities.invokeLater(() -> {
+            gui.updateMyBoard(x, y, result);
+            if (result == ShotResult.GAME_OVER) {
+                gui.gameOver(false);
+            }
+        });
+    } else if (message.equals("GAME_START")) {
+        SwingUtilities.invokeLater(() -> gui.gameStarted());
+    } else if (message.startsWith("GAME_OVER:")) {
+        int winner = Integer.parseInt(message.substring(10));
+        SwingUtilities.invokeLater(() -> {
+            gui.gameOver(winner == playerId);
+            closeConnection();
+        });
     }
+}
 
     public void sendShot(int x, int y) {
         if (myTurn) {
