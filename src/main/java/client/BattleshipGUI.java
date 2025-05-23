@@ -117,7 +117,7 @@ public class BattleshipGUI extends JFrame {
         if (isOpponent) {
             if (!placingShips && myTurn) {
                 client.sendShot(x, y);
-                
+                  button.setEnabled(false);
             }
         } else {
             if (placingShips && selectedShipType != null) {
@@ -207,12 +207,25 @@ public class BattleshipGUI extends JFrame {
   public void setTurn(boolean myTurn) {
     this.myTurn = myTurn;
     statusLabel.setText(myTurn ? "Your turn! Attack opponent's board" : "Opponent's turn...");
-    
-    // Enable/disable opponent board buttons
+
     Component[] opponentButtons = opponentBoardPanel.getComponents();
     for (Component c : opponentButtons) {
         if (c instanceof JButton) {
-            c.setEnabled(myTurn && !placingShips);
+            JButton cellButton = (JButton) c;
+            if (myTurn && !placingShips) {
+                String text = cellButton.getText();
+                // Enable the button only if it's a "virgin" cell (no text yet).
+                // If it has text ("X", or "•"), it means it has been shot or is pending.
+                // Such buttons should remain disabled.
+                if (text == null || text.isEmpty()) {
+                    cellButton.setEnabled(true);
+                } else {
+                    cellButton.setEnabled(false); // Already shot or pending, keep it disabled
+                }
+            } else {
+                // Not my turn, or still placing ships: disable all opponent board buttons.
+                cellButton.setEnabled(false);
+            }
         }
     }
 }
