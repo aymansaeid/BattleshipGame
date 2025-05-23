@@ -294,6 +294,7 @@ public class BattleshipGUI extends JFrame {
             won ? "Congratulations! You won!" : "Game over! You lost.",
             "Game Finished",
             JOptionPane.INFORMATION_MESSAGE);
+        client.closeConnection();
     }
     
     public void disableGame() {

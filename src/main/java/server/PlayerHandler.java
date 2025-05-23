@@ -107,11 +107,11 @@ public class PlayerHandler implements Runnable {
                     }
 
                     if (placementSuccess) {
-                        System.out.println("Player " + playerId + " successfully placed ship at "
+                        System.out.println("player "+playerId + " successfully placed ship at "
                                 + coordinates.get(0)[0] + "," + coordinates.get(0)[1]
                                 + " size: " + coordinates.size());
                     } else {
-                        System.out.println("Player " + playerId + " failed to place ship at "
+                        System.out.println("player "+playerId + " failed to place ship at "
                                 + coordinates.get(0)[0] + "," + coordinates.get(0)[1]
                                 + " size: " + coordinates.size());
                     }
