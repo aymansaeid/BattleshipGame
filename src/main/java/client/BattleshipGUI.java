@@ -206,7 +206,14 @@ public class BattleshipGUI extends JFrame {
     
   public void setTurn(boolean myTurn) {
     this.myTurn = myTurn;
-    statusLabel.setText(myTurn ? "Your turn! Attack opponent's board" : "Opponent's turn...");
+      if (placingShips) {
+        // Keep original ship placement status during setup
+        statusLabel.setText("Place your ships!");
+    } else {
+        // Exactly what you requested for turn status
+        statusLabel.setText(myTurn ? "Your turn! Attack opponent's board" 
+                                 : "OPPONENT'S TURN - Waiting for their move...");
+    }
     
     // Enable/disable opponent board buttons
     Component[] opponentButtons = opponentBoardPanel.getComponents();
@@ -241,35 +248,43 @@ public class BattleshipGUI extends JFrame {
     }
     
     private void updateBoard(JPanel panel, int x, int y, ShotResult result, boolean disable) {
-        try {
-            JButton button = (JButton) panel.getComponent(x * 10 + y);
-            button.setOpaque(true);
-            button.setBorderPainted(false);
-            
-            if (result.isHit()) {
-                button.setBackground(new Color(255, 100, 100));
-                button.setForeground(Color.WHITE);
-                button.setText("X");
-                if (result == ShotResult.SUNK) {
-                    button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
-                }
-            } else {
-                button.setBackground(new Color(200, 230, 255));
-                button.setForeground(Color.DARK_GRAY);
-                button.setText("•");
+    try {
+        JButton button = (JButton) panel.getComponent(x * 10 + y);
+        button.setOpaque(true);
+        button.setBorderPainted(false);
+        
+        if (result.isHit()) {
+            button.setBackground(new Color(255, 100, 100));
+            button.setForeground(Color.WHITE);
+            button.setText("X");
+            if (result == ShotResult.SUNK) {
+                button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
             }
+        } else {
+            button.setBackground(new Color(200, 230, 255));
+            button.setForeground(Color.DARK_GRAY);
+            button.setText("•");
             
-            button.setFont(button.getFont().deriveFont(Font.BOLD, 14f));
-            if (disable) button.setEnabled(false);
-            button.repaint();
-        } catch (Exception e) {
-            System.err.println("Error updating board: " + e.getMessage());
+            // Only change turn if this is the opponent's board (our attack)
+            if (panel == opponentBoardPanel) {
+                SwingUtilities.invokeLater(() -> {
+                    statusLabel.setText("OPPONENT'S TURN - Waiting for their move...");
+                });
+            }
         }
+        
+        button.setFont(button.getFont().deriveFont(Font.BOLD, 14f));
+        if (disable) button.setEnabled(false);
+        button.repaint();
+    } catch (Exception e) {
+        System.err.println("Error updating board: " + e.getMessage());
     }
+}
     
     public void gameStarted() {
-        statusLabel.setText("Game started! Waiting for turn...");
-    }
+    statusLabel.setText(myTurn ? "Game started - Your turn first!" 
+                            : "Game started - Opponent's turn first");
+}
     
     public void gameOver(boolean won) {
         statusLabel.setText(won ? "You won! Game over." : "You lost! Game over.");
@@ -290,4 +305,5 @@ public class BattleshipGUI extends JFrame {
     public void showError(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
+    
 }
