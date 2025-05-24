@@ -10,7 +10,7 @@ import javax.swing.SwingUtilities;
 
 public class BattleshipClient {
 
-    private static final String SERVER_ADDRESS = "localhost";
+    private static final String SERVER_ADDRESS = "13.48.203.60";
     private static final int SERVER_PORT = 12345;
 
     private int playerId;
