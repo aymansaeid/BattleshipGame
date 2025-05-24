@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class BattleshipServer {
@@ -31,16 +32,45 @@ public class BattleshipServer {
     }
     
     private synchronized void addWaitingPlayer(PlayerHandler player) {
+        // First clean up any disconnected players
+        cleanupDisconnectedPlayers();
+        
         waitingPlayers.add(player);
         if (waitingPlayers.size() >= 2) {
             createNewLobby();
         }
     }
     
+    private synchronized void cleanupDisconnectedPlayers() {
+        Iterator<PlayerHandler> iterator = waitingPlayers.iterator();
+        while (iterator.hasNext()) {
+            PlayerHandler player = iterator.next();
+            if (!player.isConnected()) {
+                System.out.println("Removing disconnected player " + player.getPlayerId() + " from waiting list");
+                iterator.remove();
+            }
+        }
+    }
+    
     private synchronized void createNewLobby() {
+        // Double-check that both players are still connected
+        if (waitingPlayers.size() < 2) {
+            return;
+        }
+        
+        PlayerHandler p1 = waitingPlayers.get(0);
+        PlayerHandler p2 = waitingPlayers.get(1);
+        
+        if (!p1.isConnected() || !p2.isConnected()) {
+            // Remove disconnected players and return
+            cleanupDisconnectedPlayers();
+            return;
+        }
+        
+        // Both players are connected, create the lobby
         GameLobby lobby = new GameLobby();
-        PlayerHandler p1 = waitingPlayers.remove(0);
-        PlayerHandler p2 = waitingPlayers.remove(0);
+        waitingPlayers.remove(p1);
+        waitingPlayers.remove(p2);
         
         lobby.addPlayer(p1);
         lobby.addPlayer(p2);
@@ -56,6 +86,12 @@ public class BattleshipServer {
     
     public synchronized void removeLobby(GameLobby lobby) {
         lobbies.remove(lobby);
+    }
+    
+    public synchronized void playerDisconnected(PlayerHandler player) {
+        // Remove from waiting list if present
+        waitingPlayers.remove(player);
+        System.out.println("Player " + player.getPlayerId() + " disconnected");
     }
     
     public static void main(String[] args) {

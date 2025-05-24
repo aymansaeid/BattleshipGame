@@ -46,11 +46,16 @@ public class PlayerHandler implements Runnable {
         } catch (IOException e) {
             System.err.println("Player " + playerId + " disconnected: " + e.getMessage());
         } finally {
+            
+             server.playerDisconnected(this);
+            
             if (lobby != null) {
+                
                 // This line is the trigger for ending the game.
                 lobby.removePlayer(this);
             }
             closeConnection();
+            System.out.println("Player " + playerId + " connection closed");
         }
     }
 
@@ -134,7 +139,9 @@ public class PlayerHandler implements Runnable {
     public void sendMessage(String message) {
         out.println(message);
     }
-
+public boolean isConnected() {
+    return socket != null && !socket.isClosed() && socket.isConnected();
+}
     public void closeConnection() {
         try {
             if (socket != null && !socket.isClosed()) {
