@@ -31,17 +31,17 @@ Java kullanılarak Server-Client mimarisi ile gerçek zamanlı oyun oynanabilir.
 
 
 ## AWS CONNECTION :
-1 : 
+### 1 : 
 sudo apt update
 sudo apt install default-jdk git -y
-2 :
+### 2 :
 git clone https://github.com/aymansaeid/BattleshipGame.git
-3 :
+### 3 :
 cd ~/BattleshipGame
-4 : compile the Java code
+### 4 : compile the Java code
 cd src/main/java
 javac server/*.java common/*.java
-5 : Run the server
+### 5 : Run the server
 java server.BattleshipServer
 ## for Update and Relaunch Your Game :
 
