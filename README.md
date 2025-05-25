@@ -33,6 +33,7 @@ Java kullanılarak Server-Client mimarisi ile gerçek zamanlı oyun oynanabilir.
 ## AWS CONNECTION :
 ### 1 : 
 sudo apt update
+
 sudo apt install default-jdk git -y
 ### 2 :
 git clone https://github.com/aymansaeid/BattleshipGame.git
@@ -40,6 +41,7 @@ git clone https://github.com/aymansaeid/BattleshipGame.git
 cd ~/BattleshipGame
 ### 4 : compile the Java code
 cd src/main/java
+
 javac server/*.java common/*.java
 ### 5 : Run the server
 java server.BattleshipServer
@@ -50,6 +52,7 @@ cd ~/BattleshipGame
 git pull
 
 cd src/main/java
+
 javac server/*.java common/*.java
 
 java server.BattleshipServer
