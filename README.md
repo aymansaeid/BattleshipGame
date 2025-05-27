@@ -3,6 +3,12 @@
 Bu proje Bilgisayar Ağları dersi kapsamında geliştirilmiştir.  
 Java kullanılarak Server-Client mimarisi ile gerçek zamanlı oyun oynanabilir.
 
+## Özellikler
+
+* **İstemci-Sunucu Mimarisi:** Oyun, bir sunucu uygulaması ve birden fazla istemcinin (oyuncunun) bağlanabileceği şekilde tasarlanmıştır.
+* **Klasik Oynanış:** Oyuncular gemilerini kendi tahtalarına yerleştirir ve sırayla rakip tahtasına atış yaparak gemileri batırmaya çalışır.
+* **Java Tabanlı:** Proje tamamen Java programlama dili kullanılarak geliştirilmiştir.
+
 ## Çalıştırmak için:
 
 1. `server/BattleshipServer.java` dosyasını çalıştırın (AWS veya lokal).
